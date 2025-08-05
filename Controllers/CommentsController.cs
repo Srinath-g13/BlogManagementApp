@@ -15,9 +15,10 @@ namespace BlogManagementApp.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int BlogPostId,Comment comment)
+        public async Task<IActionResult> Create(int BlogPostId, Comment comment)
         {
-            if (ModelState.IsValid) {
+            if (ModelState.IsValid)
+            {
                 comment.BlogPostId = BlogPostId;
                 comment.PostedOn = DateTime.UtcNow;
                 _Context.Comments.Add(comment);
@@ -25,7 +26,7 @@ namespace BlogManagementApp.Controllers
                 var post = await _Context.BlogPosts.FindAsync(BlogPostId);
                 return RedirectToAction("Details", "BlogPosts", new { slug = post?.Slug });
             }
-            var BlogPost = await _Context.BlogPosts.Include(b=>b.Author).Include(b=>b.Comments).FirstOrDefaultAsync(b=>b.Id == BlogPostId);
+            var BlogPost = await _Context.BlogPosts.Include(b => b.Author).Include(b => b.Comments).FirstOrDefaultAsync(b => b.Id == BlogPostId);
             if (BlogPost == null)
             {
                 ViewBag.ErrorMessage = "Blog Post Not Found";
@@ -38,4 +39,5 @@ namespace BlogManagementApp.Controllers
             };
             return View("../BlogPosts/Details", viewModel);
         }
+    }
 }
